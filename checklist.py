@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 
+checklist = list()
+
+
 def create(item):
     checklist.append(item)
 
@@ -49,13 +52,15 @@ def select(function_code):
         create(input_item)
     elif function_code == "R":
         item_index = user_input("Index Number?")
-        read(item_index)
+        print(read(int(item_index)))
     elif function_code == "P":
         list_all_items()
     elif function_code == "Q":
-        return false
+        return False
     else:
         print("Unknown Option")
+
+    return True
 
 
 def user_input(prompt):
