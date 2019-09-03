@@ -1,23 +1,32 @@
 #!/usr/bin/env python
 
+import re
 
 checklist = list()
 
 
-def create(item):
-    checklist.append(item)
+def create():
+    input = user_input("Enter a value: ")
+    checklist.append(input)
+    print("Added item")
+    return True
 
 
-def read(index):
-    return checklist[index]
+def read():
+    print(checklist[int(input("Enter an index: "))])
+    return True
 
 
-def update(index, item):
+def update():
+    index = int(input("Enter an index: "))
+    item = input("Enter a replacement value: ")
     checklist[index] = item
+    return True
 
 
-def destroy(index):
-    checklist.pop(index)
+def destroy():
+    checklist.pop(int(input("Enter an index: ")))
+    return True
 
 
 def list_all_items():
@@ -27,40 +36,52 @@ def list_all_items():
         index += 1
 
 
+def quit():
+    return False
+
+
 def mark_completed(index):
     checklist[index] = "√" + checklist[index]
 
 
-def test():
-    create("purple sox")
-    create("red cloak")
+# Validating functions
+def validate_general_input(user_input):
+    if(len(user_input) > 0):
+        return True
+    else:
+        return False
 
-    print(read(0))
-    print(read(1))
 
-    update(0, "purple socks")
-    destroy(1)
+def validate_code(user_input):
+    return (validate_general_input(user_input) and re.match("C|R|P|U|D|Q", user_input))
 
-    print(read(0))
 
-    list_all_items()
+def validate_code_1(user_input):
+    if validate_general_input(user_input) and re.match("C|R|P|U|D|Q", user_input):
+        return True
+    else:
+        return False
+
+
+def validate_index(user_input):
+    if validate_general_input() and user_input.isdigit() and int(user_input) <= len(checklist):
+        return True
+    else:
+        return False
+
+
+codes = {
+    "C": create,
+    "R": read,
+    "P": list_all_items,
+    "U": update,
+    "D": destroy,
+    "Q": quit
+}
 
 
 def select(function_code):
-    if function_code == "C":
-        input_item = user_input("Input item:")
-        create(input_item)
-    elif function_code == "R":
-        item_index = user_input("Index Number?")
-        print(read(int(item_index)))
-    elif function_code == "P":
-        list_all_items()
-    elif function_code == "Q":
-        return False
-    else:
-        print("Unknown Option")
-
-    return True
+    return codes[function_code]()
 
 
 def user_input(prompt):
@@ -70,9 +91,14 @@ def user_input(prompt):
 
 def main():
     running = True
+    prompt = "\nEnter C to add item, enter R to read item, enter D to delete item, enter U to update item, enter P to list all items, enter Q to quit: "
+
     while running:
-        selection = user_input("Enter C to input item, R to read item, P to list all items")
-        running = select(selection)
+        input = user_input(prompt)
+        if validate_code(input):
+            running = select(input)
+        else:
+            input = user_input("Incorrect code, try again!\n\n" + prompt)
 
 
 if __name__ == "__main__":
