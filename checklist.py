@@ -3,35 +3,37 @@
 import re
 
 checklist = list()
-quit = False
 
 
 def create(value):
     checklist.append(value)
-    print("Added item")
+    print("Added item: " + value)
 
 
 def read(index):
-    print(checklist[int(index)])
+    print("Value at index " + str(index) + " is: " + checklist[int(index)])
 
 
 def update(index, value):
     checklist[int(index)] = value
+    print("Updated value at index: " + str(index) + " to: " + value)
 
 
 def destroy(index):
     checklist.pop(int(index))
+    print("Destroyed value at index: " + str(index))
 
 
 def list_all_items():
     index = 0
+    print("All items in the checklist: ")
     for item in checklist:
         print("{} : {}".format(index, item))
         index += 1
 
 
 def mark_completed(index):
-    checklist[index] = "√" + checklist[index]
+    checklist[int(index)] = "√ " + checklist[int(index)]
 
 
 # Input-validating functions
@@ -40,7 +42,7 @@ def is_input_empty(user_input):
 
 
 def validate_code(user_input):
-    return (not is_input_empty(user_input) and user_input.upper() in codes)
+    return (not is_input_empty(user_input) and user_input in codes)
 
 
 def is_valid_index(user_input):
@@ -53,15 +55,16 @@ codes = {
     "P": list_all_items,
     "U": (update, "Enter an index; ", "Enter a replacement value: "),
     "D": (destroy, "Enter an index: "),
-    "Q": quit
+    "M": (mark_completed, "Enter an index: "),
+    "Q": "Quitting"
 }
 
 
 def select(function_code):
 
-    is_input_accepted = True
+    should_i_quit = False
 
-    if function_code.upper() == "U":
+    if function_code == "U":
         index = user_input(codes[function_code][1])
         value = user_input(codes[function_code][2])
 
@@ -69,11 +72,10 @@ def select(function_code):
             codes[function_code][0](index, value)
         else:
             print("Invalid input")
-            is_input_accepted = False
 
-    elif function_code.upper() == "Q":
-        quit = True
-    elif function_code.upper() == "P":
+    elif function_code == "Q":
+        should_i_quit = True
+    elif function_code == "P":
         codes[function_code]()
     else:
         index_or_value = user_input(codes[function_code][1])
@@ -82,16 +84,14 @@ def select(function_code):
             if is_valid_index(index_or_value):
                 codes[function_code][0](index_or_value)
             else:
-                print("Invalid input")
-                is_input_accepted = False
+                print("Index out of range")
         else:
             if not is_input_empty(index_or_value):
                 codes[function_code][0](index_or_value)
             else:
-                print("Invalid input")
-                is_input_accepted = False
+                print("No input")
 
-    return is_input_accepted
+    return should_i_quit
 
 
 def user_input(prompt):
@@ -99,19 +99,18 @@ def user_input(prompt):
 
 
 def main():
-    running = True
-    prompt = "\nEnter C to add item, enter R to read item, enter D to delete item, enter U to update item, enter P to list all items, enter Q to quit: "
+    separator = "------------------------------------------------------------------"
+    prompt = "Enter C to add item, enter R to read item, enter D to delete item,\nenter M to mark item completed, enter U to update item, enter P to\nlist all items, enter Q to quit: "
 
-    index = 0
+    should_i_quit = False
 
-    while not quit or index < 5:
-        input = user_input(prompt)
-        if validate_code(input):
-            running = select(input.upper())
+    while not should_i_quit:
+        function_code = user_input(separator + "\n" + prompt).upper()
+        if validate_code(function_code):
+            should_i_quit = select(function_code.upper())
         else:
             print("Incorrect code, try again!\n")
 
-        index += 1
 
 if __name__ == "__main__":
     main()
