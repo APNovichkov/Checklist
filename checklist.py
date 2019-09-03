@@ -53,11 +53,11 @@ def validate_general_input(user_input):
 
 
 def validate_code(user_input):
-    return (validate_general_input(user_input) and re.match("C|R|P|U|D|Q", user_input))
+    return (validate_general_input(user_input) and user_input.upper() in codes)
 
 
 def validate_code_1(user_input):
-    if validate_general_input(user_input) and re.match("C|R|P|U|D|Q", user_input):
+    if validate_general_input(user_input) and user_input in codes:
         return True
     else:
         return False
@@ -77,6 +77,7 @@ codes = {
     "U": update,
     "D": destroy,
     "Q": quit
+
 }
 
 
@@ -98,7 +99,7 @@ def main():
         if validate_code(input):
             running = select(input)
         else:
-            input = user_input("Incorrect code, try again!\n\n" + prompt)
+            input = user_input("Incorrect code, try again!\n\n")
 
 
 if __name__ == "__main__":
