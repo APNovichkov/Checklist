@@ -49,6 +49,30 @@ def is_valid_index(user_input):
     return (not is_input_empty(user_input) and user_input.isdigit() and int(user_input) < len(checklist))
 
 
+def test():
+    create("hi")
+    create(3)
+
+    # Should print 3
+    print(read(1))
+
+    list_all_items()
+
+    update(0, "hi 2.0")
+    create("dog")
+
+    # Will delete 3
+    delete(1)
+
+    list_all_items()
+
+    mark_completed(0)
+    mark_completed(1)
+
+    # Should print hi 2.0 and dog and both should have a checkmark under them
+    list_all_items()
+
+
 codes = {
     "C": (create, "Enter a value: "),
     "R": (read, "Enter an index: "),
