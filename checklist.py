@@ -7,16 +7,16 @@ checklist = list()
 
 def create(value):
     checklist.append(value)
-    print("Added item: " + value)
+    print("Added item: " + str(value))
 
 
 def read(index):
-    print("Value at index " + str(index) + " is: " + checklist[int(index)])
+    print("Value at index " + str(index) + " is: " + str(checklist[int(index)]))
 
 
 def update(index, value):
     checklist[int(index)] = value
-    print("Updated value at index: " + str(index) + " to: " + value)
+    print("Updated value at index: " + str(index) + " to: " + str(value))
 
 
 def destroy(index):
@@ -54,7 +54,7 @@ def test():
     create(3)
 
     # Should print 3
-    print(read(1))
+    print(str(read(1)))
 
     list_all_items()
 
@@ -62,7 +62,7 @@ def test():
     create("dog")
 
     # Will delete 3
-    delete(1)
+    destroy(1)
 
     list_all_items()
 
@@ -123,6 +123,9 @@ def user_input(prompt):
 
 
 def main():
+
+    test()
+
     separator = "------------------------------------------------------------------"
     prompt = "Enter C to add item, enter R to read item, enter D to delete item,\nenter M to mark item completed, enter U to update item, enter P to\nlist all items, enter Q to quit: "
 
